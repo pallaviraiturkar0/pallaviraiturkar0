@@ -8,9 +8,6 @@
 
 <br/>
 
-<a href="https://pallaviraiturkar0.github.io"><img src="https://img.shields.io/badge/Website-7F5AF0?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website" /></a>
-
-<br/><br/>
 
 <img src="https://streak-stats.demolab.com?user=pallaviraiturkar0&theme=tokyonight&hide_border=true&border_radius=12&ring=7F5AF0&fire=2CB67D&currStreakLabel=2CB67D" alt="GitHub contribution streak" />
 
