@@ -12,8 +12,7 @@
 
 <br/><br/>
 
-<img src="https://github-readme-stats.vercel.app/api?username=pallaviraiturkar0&show_icons=true&include_all_commits=true&count_private=true&theme=tokyonight&hide_border=true&border_radius=12" height="170" alt="GitHub stats" />
-<img src="https://github-readme-stats.vercel.app/api/top-langs/?username=pallaviraiturkar0&layout=compact&theme=tokyonight&hide_border=true&border_radius=12" height="170" alt="Top languages" />
+<img src="https://streak-stats.demolab.com?user=pallaviraiturkar0&theme=tokyonight&hide_border=true&border_radius=12&ring=7F5AF0&fire=2CB67D&currStreakLabel=2CB67D" alt="GitHub contribution streak" />
 
 ### 🚀 My contributions, as a space shooter
 
