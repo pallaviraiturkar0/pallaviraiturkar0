@@ -44,6 +44,14 @@ query($login: String!) {
       nodes { ... on Repository { name } }
     }
     contributionsCollection {
+      commitContributionsByRepository(maxRepositories: 100) {
+        repository { primaryLanguage { name color } }
+        contributions { totalCount }
+      }
+      pullRequestContributionsByRepository(maxRepositories: 100) {
+        repository { primaryLanguage { name color } }
+        contributions { totalCount }
+      }
       contributionCalendar {
         totalContributions
         weeks { contributionDays { contributionCount date } }
@@ -58,7 +66,7 @@ def fetch():
     req = urllib.request.Request(
         "https://api.github.com/graphql",
         data=json.dumps({"query": QUERY, "variables": {"login": USERNAME}}).encode(),
-        headers={"Authorization": f"bearer {os.environ['GH_TOKEN']}", "Content-Type": "application/json"},
+        headers={"Authorization": f"bearer {os.environ.get('PROFILE_TOKEN') or os.environ['GH_TOKEN']}", "Content-Type": "application/json"},
     )
     with urllib.request.urlopen(req) as r:
         data = json.load(r)
@@ -109,7 +117,18 @@ def stars(w, h, n, seed):
 
 
 def languages(user):
+    # Weight by the user's commits + PRs per repo so private/enterprise work counts.
+    # Only language names and percentages are rendered; repo names never leave this function.
     totals, colors = {}, {}
+    cc = user["contributionsCollection"]
+    for item in cc["commitContributionsByRepository"] + cc["pullRequestContributionsByRepository"]:
+        lang = item["repository"]["primaryLanguage"]
+        if lang:
+            totals[lang["name"]] = totals.get(lang["name"], 0) + item["contributions"]["totalCount"]
+            colors[lang["name"]] = lang["color"] or MUTED
+    if totals:
+        s = sum(totals.values())
+        return [(n, v / s * 100, colors[n]) for n, v in sorted(totals.items(), key=lambda kv: -kv[1])[:5]]
     for repo in user["repositories"]["nodes"]:
         for e in repo["languages"]["edges"]:
             n = e["node"]["name"]
@@ -220,7 +239,7 @@ def city(days, total):
 def lang_card(user):
     W, H = 412, 260
     body = [f'<text x="24" y="70" class="mono" font-size="18" font-weight="700" fill="#fff">Language Stack</text>',
-            f'<text x="24" y="90" class="mono" font-size="11" fill="{ACCENT}">Repository-weighted technologies</text>']
+            f'<text x="24" y="90" class="mono" font-size="11" fill="{ACCENT}">Contribution-weighted technologies</text>']
     for i, (n, pct, c) in enumerate(languages(user)):
         y = 124 + i * 27
         body += [f'<circle cx="30" cy="{y-4}" r="5" fill="{c}"/>',
