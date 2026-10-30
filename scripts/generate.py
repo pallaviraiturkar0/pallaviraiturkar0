@@ -291,6 +291,8 @@ def projects_card(user):
         tx = x + 12
         for t in ([t["topic"]["name"] for t in r["repositoryTopics"]["nodes"]] or [lang["name"]])[:2]:
             tw = 14 + len(t) * 6.6
+            if tx + tw > x + w - 10:
+                break
             body.append(f'<rect x="{tx}" y="{y+94}" width="{tw:.0f}" height="20" rx="6" fill="none" stroke="{GLOW}" stroke-opacity=".6"/>'
                         f'<text x="{tx+7}" y="{y+108}" class="mono" font-size="10.5" fill="{GLOW}">{escape(t)}</text>')
             tx += tw + 6
