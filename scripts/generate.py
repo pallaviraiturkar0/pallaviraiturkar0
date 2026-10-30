@@ -116,6 +116,18 @@ def stars(w, h, n, seed):
     return "".join(out)
 
 
+def readable(color):
+    # Lift dark language colors (e.g. Lua's navy) so they stay visible on the dark card.
+    if not color or not color.startswith("#") or len(color) != 7:
+        return MUTED
+    r, g, b = (int(color[i:i + 2], 16) for i in (1, 3, 5))
+    lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
+    if lum >= 90:
+        return color
+    k = 0.55
+    return "#%02x%02x%02x" % tuple(int(v + (255 - v) * k) for v in (r, g, b))
+
+
 def languages(user):
     # Weight by the user's commits + PRs per repo so private/enterprise work counts.
     # Only language names and percentages are rendered; repo names never leave this function.
@@ -125,7 +137,7 @@ def languages(user):
         lang = item["repository"]["primaryLanguage"]
         if lang:
             totals[lang["name"]] = totals.get(lang["name"], 0) + item["contributions"]["totalCount"]
-            colors[lang["name"]] = lang["color"] or MUTED
+            colors[lang["name"]] = readable(lang["color"])
     if totals:
         s = sum(totals.values())
         return [(n, v / s * 100, colors[n]) for n, v in sorted(totals.items(), key=lambda kv: -kv[1])[:5]]
@@ -133,7 +145,7 @@ def languages(user):
         for e in repo["languages"]["edges"]:
             n = e["node"]["name"]
             totals[n] = totals.get(n, 0) + e["size"]
-            colors[n] = e["node"]["color"] or MUTED
+            colors[n] = readable(e["node"]["color"])
     s = sum(totals.values()) or 1
     return [(n, v / s * 100, colors[n]) for n, v in sorted(totals.items(), key=lambda kv: -kv[1])[:5]]
 
@@ -284,7 +296,7 @@ def projects_card(user):
         x, y, w, h = 20 + i * 190, 84, 182, 156
         lang = r["primaryLanguage"] or {"name": "Code", "color": MUTED}
         body += [f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="10" fill="{PANEL}" stroke="#1e3a5f"/>',
-                 f'<circle cx="{x+14}" cy="{y+22}" r="4" fill="{lang["color"] or MUTED}"/>',
+                 f'<circle cx="{x+14}" cy="{y+22}" r="4" fill="{readable(lang["color"])}"/>',
                  f'<text x="{x+24}" y="{y+26}" class="mono" font-size="13" font-weight="700" fill="#fff">{escape(r["name"][:18])}</text>']
         for j, line in enumerate(wrap(r["description"], 24)):
             body.append(f'<text x="{x+12}" y="{y+50+j*16}" class="mono" font-size="11" fill="{MUTED}">{escape(line)}</text>')
