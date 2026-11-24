@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="assets/header.svg?v=1795452713" alt="Pallavi Raiturkar — Full-stack engineer · Human-centered AI & ML" width="100%" />
+<img src="assets/header.svg?v=1795538616" alt="Pallavi Raiturkar — Full-stack engineer · Human-centered AI & ML" width="100%" />
 
-<img src="assets/city.svg?v=1795452713" alt="3D city of my GitHub contributions this year" width="100%" />
+<img src="assets/city.svg?v=1795538616" alt="3D city of my GitHub contributions this year" width="100%" />
 
-<img src="assets/languages.svg?v=1795452713" alt="Language stack" width="49%" />
-<img src="assets/projects.svg?v=1795452713" alt="Featured projects" width="49%" />
+<img src="assets/languages.svg?v=1795538616" alt="Language stack" width="49%" />
+<img src="assets/projects.svg?v=1795538616" alt="Featured projects" width="49%" />
 
 </div>
